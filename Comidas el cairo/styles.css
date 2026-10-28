@@ -1,0 +1,427 @@
+/* ==========================================================
+   PedidoCentral · Hoja de estilos
+   Secciones:
+   1. Variables y tema (claro / oscuro)
+   2. Base
+   3. Encabezado, resumen y navegación
+   4. Estructura de las vistas
+   5. Formularios
+   6. Botones
+   7. Tiquetes de pedido
+   8. Mensajes y estados vacíos
+   9. Responsive
+   ========================================================== */
+
+
+/* ---------- 1. Variables y tema ---------- */
+
+:root {
+  /* Colores */
+  --bg: #ffd23f;       /* fondo mostaza */
+  --paper: #fffef9;    /* tarjetas */
+  --ink: #1b1a17;      /* texto y bordes */
+  --mu: #5d584b;       /* texto secundario */
+  --red: #e63427;      /* acción principal y alertas */
+  --btx: #ffffff;      /* texto sobre botón rojo */
+  --green: #1f8a4c;    /* pedido entregado */
+  --field: #fff4c9;    /* campos de formulario */
+  --late: #ffe3df;     /* pedido sin atender */
+
+  /* Tipografía */
+  --font-title: "Bricolage Grotesque", Figtree, system-ui, sans-serif;
+  --font-body: Figtree, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Bordes y sombras */
+  --border: 2.5px solid var(--ink);
+  --shadow: 4px 4px 0 var(--ink);
+
+  color-scheme: light;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Tema oscuro automático */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1f1c15;
+    --paper: #2c2922;
+    --ink: #f4eedd;
+    --mu: #b9b19b;
+    --red: #ff5a4a;
+    --btx: #1b1a17;
+    --green: #4cc47f;
+    --field: #3a3629;
+    --late: #4a2622;
+    color-scheme: dark;
+  }
+}
+
+/* Tema oscuro forzado */
+:root[data-theme="dark"] {
+  --bg: #1f1c15;
+  --paper: #2c2922;
+  --ink: #f4eedd;
+  --mu: #b9b19b;
+  --red: #ff5a4a;
+  --btx: #1b1a17;
+  --green: #4cc47f;
+  --field: #3a3629;
+  --late: #4a2622;
+  color-scheme: dark;
+}
+
+
+/* ---------- 2. Base ---------- */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font: 16px/1.45 var(--font-body);
+  min-height: 100vh;
+}
+
+:focus-visible {
+  outline: 3px solid var(--red);
+  outline-offset: 2px;
+}
+
+h1,
+h2 {
+  font-family: var(--font-title);
+  font-weight: 800;
+}
+
+
+/* ---------- 3. Encabezado, resumen y navegación ---------- */
+
+.wrap {
+  max-width: 1120px;
+  margin: auto;
+  padding: 18px 16px 48px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(30px, 6vw, 46px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.stamp {
+  font-weight: 700;
+  font-size: 14px;
+  border: var(--border);
+  border-radius: 99px;
+  padding: 5px 14px;
+  background: var(--paper);
+  transform: rotate(-2deg);
+}
+
+/* Contadores */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.stat {
+  background: var(--paper);
+  border: var(--border);
+  border-radius: 14px;
+  padding: 10px 12px;
+  box-shadow: var(--shadow);
+}
+
+.stat b {
+  display: block;
+  font: 800 30px/1 var(--font-title);
+}
+
+.stat span {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--mu);
+}
+
+/* Pestañas */
+nav {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+nav button {
+  flex: 1;
+  min-width: 120px;
+  padding: 12px 14px;
+  border: var(--border);
+  border-radius: 99px;
+  background: var(--paper);
+  color: var(--ink);
+  font: 700 16px var(--font-body);
+  cursor: pointer;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+nav button.on {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+nav button:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--ink);
+}
+
+
+/* ---------- 4. Estructura de las vistas ---------- */
+
+.grid,
+.cols {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  align-items: start;
+}
+
+.panel {
+  background: var(--paper);
+  border: var(--border);
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+h2 {
+  margin: 0 0 12px;
+  font-size: 22px;
+  line-height: 1.1;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.small {
+  margin-top: 18px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+
+/* ---------- 5. Formularios ---------- */
+
+label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 12px 0 4px;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 11px 12px;
+  border: var(--border);
+  border-radius: 10px;
+  background: var(--field);
+  color: var(--ink);
+  font: 500 16px var(--font-body);
+}
+
+textarea {
+  min-height: 84px;
+  resize: vertical;
+}
+
+
+/* ---------- 6. Botones ---------- */
+
+.btn {
+  padding: 11px 16px;
+  border: var(--border);
+  border-radius: 10px;
+  background: var(--red);
+  color: var(--btx);
+  font: 700 15px var(--font-body);
+  cursor: pointer;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--ink);
+}
+
+.btn.sec {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.btn.sm {
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+.btn.big {
+  width: 100%;
+  padding: 13px;
+  font-size: 16px;
+}
+
+
+/* ---------- 7. Tiquetes de pedido ---------- */
+
+.ticket {
+  border: var(--border);
+  border-top: 8px solid var(--ch, var(--ink));  /* color según el canal */
+  border-radius: 12px;
+  background: var(--paper);
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+}
+
+.ticket.late {
+  background: var(--late);
+  border-color: var(--red);
+  box-shadow: 4px 4px 0 var(--red);
+}
+
+/* Cuerpo */
+.tb {
+  padding: 12px 14px;
+}
+
+.th {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.num {
+  font: 800 22px var(--font-title);
+}
+
+.chip {
+  background: var(--ch, var(--ink));
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 99px;
+}
+
+.who {
+  font-weight: 700;
+  font-size: 17px;
+  margin-top: 4px;
+}
+
+.items {
+  white-space: pre-wrap;
+  margin: 8px 0;
+  font-weight: 500;
+}
+
+.meta {
+  color: var(--mu);
+  font-size: 14px;
+}
+
+/* Barra de progreso */
+.prog {
+  display: flex;
+  gap: 4px;
+  margin-top: 10px;
+}
+
+.prog i {
+  flex: 1;
+  height: 7px;
+  border-radius: 4px;
+  background: rgba(127, 120, 100, 0.3);
+}
+
+.prog i.f {
+  background: var(--ink);
+}
+
+.prog.done i {
+  background: var(--green);
+}
+
+/* Pie del tiquete */
+.tf {
+  border-top: 2.5px dashed var(--ink);
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.when,
+.state {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.when.l {
+  color: var(--red);
+}
+
+
+/* ---------- 8. Mensajes y estados vacíos ---------- */
+
+.warn {
+  background: var(--late);
+  border: 2.5px solid var(--red);
+  border-radius: 10px;
+  padding: 12px;
+  margin-top: 14px;
+}
+
+.empty {
+  color: var(--mu);
+  padding: 6px 0 2px;
+}
+
+
+/* ---------- 9. Responsive ---------- */
+
+@media (max-width: 520px) {
+  .stat b {
+    font-size: 24px;
+  }
+
+  .panel {
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+}
